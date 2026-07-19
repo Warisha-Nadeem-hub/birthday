@@ -4,309 +4,639 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 22nd Birthday Nawal!</title>
-    <!-- Google Fonts for a cute typography style -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Great+Vibes&family=Quicksand:wght=500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 50%, #e8dbfc 100%);
+            background: #020208;
             font-family: 'Quicksand', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Full Screen FX Canvas */
+        #fxCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Aurora Overlay Effect */
+        .aurora {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, rgba(0, 255, 150, 0.15), rgba(0, 150, 255, 0.1), transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: auroraMove 12s ease-in-out infinite alternate;
+        }
+        @keyframes auroraMove {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0.9; transform: scale(1.1) translateX(-20px); }
+        }
+
+        /* Responsive Sidebar Architecture */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 80px;
+            background: rgba(10, 15, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 2px solid rgba(255, 182, 193, 0.1);
+            z-index: 1050;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            color: #4a4a4a;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.4s ease;
         }
 
-        /* Canvas container for Three.js background */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none; /* Let clicks pass through to buttons */
+        .sidebar-btn {
+            background: linear-gradient(135deg, #ff758f, #b583ff);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-family: 'Fredoka One', cursive;
+            box-shadow: 0 8px 20px rgba(255, 92, 138, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .sidebar-btn span { font-size: 0.65rem; margin-top: 2px; font-family: 'Quicksand', sans-serif; font-weight: bold; }
+        .sidebar-btn:hover { transform: scale(1.1) translateX(5px); background: linear-gradient(135deg, #ff477e, #98f5ff); }
 
-        /* Main UI Container */
-        .card-container {
+        /* Main App Architecture */
+        .app-wrapper {
             position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 40px 30px;
+            z-index: 10;
             width: 90%;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.4);
-            border: 4px solid #fff;
-            transform: scale(0.9);
-            opacity: 0;
-            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 20px 0;
+            margin-left: 40px; /* Offset for sidebar desktop symmetry */
+            transition: all 0.4s ease;
         }
 
-        @keyframes popIn {
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        .section-card {
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 2px solid rgba(255, 182, 193, 0.2);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: all 0.5s ease;
         }
 
         h1 {
             font-family: 'Fredoka One', cursive;
-            font-size: 2.5rem;
-            color: #ff5c8a;
-            text-shadow: 2px 2px 0px #fff, 4px 4px 0px rgba(255, 92, 138, 0.15);
-            margin-bottom: 5px;
-            line-height: 1.2;
+            font-size: 2.4rem;
+            background: linear-gradient(45deg, #ff758f, #ffb6c1, #b583ff, #98f5ff);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shineText 4s linear infinite;
         }
+        @keyframes shineText { to { background-position: 300% center; } }
 
-        .age-badge {
+        .badge {
             display: inline-block;
-            background: #b583ff;
-            color: white;
-            font-family: 'Fredoka One', cursive;
-            padding: 5px 15px;
+            background: linear-gradient(135deg, #b583ff, #ff758f);
+            padding: 4px 16px;
             border-radius: 20px;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(181, 131, 255, 0.4);
-            transform: rotate(-3deg);
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
-        p.message {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-weight: 700;
-            color: #6a6a6a;
+        /* Interactive Zone: Gift & Cake Side-by-Side */
+        .interactive-zone {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            perspective: 1000px;
+            margin: 20px 0;
         }
 
-        /* Cute CSS 3D Interactive Box */
-        .gift-scene {
-            width: 120px;
-            height: 120px;
-            perspective: 600px;
-            margin: 0 auto 35px auto;
-            cursor: pointer;
-        }
-
+        /* 3D Interactive Present Box */
+        .gift-scene { width: 100px; height: 100px; cursor: pointer; position: relative; }
         .cube {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
             transform: rotateX(-20deg) rotateY(45deg);
-            transition: transform 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .gift-scene:hover .cube {
-            transform: rotateX(-20deg) rotateY(225deg) scale(1.1);
-        }
-
         .cube__face {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            border: 3px solid #fff;
-            opacity: 0.95;
+            position: absolute; width: 100px; height: 100px; border: 2px solid #fff;
+            background: #ff4d6d; transition: transform 0.8s ease;
         }
+        .cube__face::before { content: ''; position: absolute; background: #ffde43; top: 0; left: 42px; width: 16px; height: 100%; }
+        .cube__face::after { content: ''; position: absolute; background: #ffde43; top: 42px; left: 0; width: 100%; height: 16px; }
+        
+        .cube__face--front  { transform: rotateY(  0deg) translateZ(50px); }
+        .cube__face--right  { transform: rotateY( 90deg) translateZ(50px); }
+        .cube__face--back   { transform: rotateY(180deg) translateZ(50px); }
+        .cube__face--left   { transform: rotateY(-90deg) translateZ(50px); }
+        .cube__face--top    { background: #ff758f; transform: rotateX( 90deg) translateZ(50px); transform-origin: top; }
+        .cube__face--bottom { background: #c9184a; transform: rotateX(-90deg) translateZ(50px); }
 
-        /* Gift box colors & ribbons using CSS backgrounds */
-        .cube__face--front  { background: #ff758f; transform: rotateY(  0deg) translateZ(60px); }
-        .cube__face--right  { background: #ff758f; transform: rotateY( 90deg) translateZ(60px); }
-        .cube__face--back   { background: #ff758f; transform: rotateY(180deg) translateZ(60px); }
-        .cube__face--left   { background: #ff758f; transform: rotateY(-90deg) translateZ(60px); }
-        .cube__face--top    { background: #ff8fa3; transform: rotateX( 90deg) translateZ(60px); }
-        .cube__face--bottom { background: #ff4d6d; transform: rotateX(-90deg) translateZ(60px); }
+        .cube.open .cube__face--top { transform: rotateX(150deg) translateZ(50px); background: #ff4d6d; }
+        .cube.open { animation: jumpOut 0.5s ease infinite alternate; }
+        @keyframes jumpOut { from { transform: rotateX(-20deg) rotateY(225deg) translateY(0); } to { transform: rotateX(-20deg) rotateY(225deg) translateY(-10px); } }
 
-        /* Cross ribbons */
-        .cube__face::before {
-            content: '';
-            position: absolute;
-            background: #ffde43;
-            top: 0; left: 50px; width: 20px; height: 100%;
+        /* Blowout Interactive Candle Layer */
+        .cake-container { position: relative; width: 100px; height: 100px; transform: rotateX(-10deg) rotateY(10deg); }
+        .cake { width: 90px; height: 50px; background: #ffb6c1; border-radius: 50%; position: absolute; bottom: 10px; box-shadow: 0 6px 0 #ff758f, inset 0 -4px 8px rgba(0,0,0,0.2); }
+        .candle { width: 8px; height: 35px; background: linear-gradient(to right, #b583ff, #e8dbfc); position: absolute; bottom: 45px; left: 41px; border-radius: 3px; }
+        .flame {
+            width: 12px; height: 18px; background: #ffde43; border-radius: 50% 50% 20% 20%;
+            position: absolute; top: -20px; left: -2px; box-shadow: 0 0 12px #ffde43;
+            animation: flicker 0.1s ease-in-out infinite alternate;
         }
-        .cube__face::after {
-            content: '';
-            position: absolute;
-            background: #ffde43;
-            top: 50px; left: 0; width: 100%; height: 20px;
-        }
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.15) rotate(3deg); } }
+        .flame.extinguished { display: none !important; }
 
-        /* Wish Button */
-        .btn {
-            font-family: 'Fredoka One', cursive;
-            background: #ff5c8a;
+        .blow-prompt { font-size: 0.85rem; color: #98f5ff; font-weight: bold; margin-top: 5px; }
+
+        /* Pop-up Modal Styling */
+        .memories-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 2, 8, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .memories-modal.open { opacity: 1; pointer-events: auto; }
+        
+        .modal-card {
+            background: rgba(20, 25, 45, 0.85);
+            border: 2px solid rgba(152, 245, 255, 0.3);
+            border-radius: 28px;
+            padding: 30px 20px;
+            width: 90%;
+            max-width: 460px;
+            text-align: center;
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+        .memories-modal.open .modal-card { transform: scale(1); }
+
+        .close-modal {
+            position: absolute; top: 15px; right: 20px;
+            font-size: 2rem; color: #ff758f; cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .close-modal:hover { transform: scale(1.2); color: #ff477e; }
+
+        /* Memory Gallery Grid inside Modal */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+        .photo-frame {
+            background: #fff; padding: 5px 5px 18px 5px; border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4); transform: rotate(calc(var(--r) * 1deg));
+            transition: transform 0.3s ease; cursor: pointer;
+        }
+        .photo-frame:hover { transform: scale(1.15) rotate(0deg); z-index: 50; }
+        .photo-frame img { width: 100%; height: 110px; object-fit: cover; border-radius: 4px; }
+
+        /* Love Letter Assembly */
+        .letter-btn {
+            background: #ff5c8a; border: none; padding: 12px 28px; border-radius: 50px;
+            font-family: 'Fredoka One', cursive; color: #fff; cursor: pointer; font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(255,92,138,0.3); transition: all 0.3s ease; margin: 15px 0;
+        }
+        .letter-btn:hover { background: #ff477e; transform: scale(1.05); }
+
+        .letter-content {
+            max-height: 0; overflow: hidden; transition: max-height 1s cubic-bezier(0, 1, 0, 1);
+            font-family: 'Great Vibes', cursive; font-size: 1.7rem; color: #ffe5ec; line-height: 1.4;
+            background: rgba(255,255,255,0.05); border-radius: 14px; padding: 0 15px;
+        }
+        .letter-content.open { max-height: 1000px; padding: 20px 15px; transition: max-height 1s ease-in-out; }
+
+        /* Cinematic Outro Viewport Overlay */
+        .cinematic-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 3000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            opacity: 0; pointer-events: none; transition: opacity 2s ease-in-out;
+            padding: 30px;
+        }
+        .cinematic-overlay.active { opacity: 1; pointer-events: auto; }
+        .cinematic-title { font-family: 'Fredoka One', cursive; font-size: 2.8rem; color: #ff758f; margin-bottom: 20px; }
+        .cinematic-text { font-size: 1.3rem; max-width: 600px; line-height: 1.8; color: #e8dbfc; font-weight: 500; }
+        
+        /* Music Controller Widget */
+        .music-widget { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 1001; 
+            opacity: 0.7; 
+            background: rgba(255, 92, 138, 0.85);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            border-radius: 50px;
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 92, 138, 0.3);
+            backdrop-filter: blur(5px);
             transition: all 0.3s ease;
-            outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+        .music-widget:hover { opacity: 1; transform: scale(1.05); background: #ff477e; }
 
-        .btn:hover {
-            background: #ff477e;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(255, 92, 138, 0.5);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
+        /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                bottom: 0;
+                top: auto;
+                left: 0;
+                height: 70px;
+                width: 100%;
+                border-right: none;
+                border-top: 2px solid rgba(255, 182, 193, 0.15);
+                flex-direction: row;
+                justify-content: center;
+                padding: 0;
+            }
+            .sidebar-btn {
+                width: 55px;
+                height: 55px;
+                border-radius: 14px;
+            }
+            .sidebar-btn:hover {
+                transform: scale(1.1) translateY(-5px);
+            }
+            .app-wrapper {
+                margin-left: 0;
+                width: 92%;
+                padding-bottom: 90px; /* Space so bottom bar doesn't hide text */
+            }
+            .photo-frame img {
+                height: 85px; /* Scale photos properly for mobile screens */
+            }
+            .music-widget {
+                bottom: 85px; /* Shift music widget up above mobile navbar */
+                right: 15px;
+            }
         }
     </style>
-
-    <!-- Loading Three.js for 3D Background Floating Balloons/Spheres -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Loading Canvas-Confetti for the celebratory burst effect -->
+    <!-- Include canvas-confetti library for present opening FX -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
+    <!-- Beautiful, low-key Instrumental Birthday Background Track -->
+    <audio id="bgMusic" loop src="birthday.mp3"></audio>
 
-    <div class="card-container">
-        <h1>Happy Birthday,<br>Nawal Numan!</h1>
-        <div class="age-badge">22 Years Bold ✨</div>
-        
-        <!-- 3D Interactive Present Box -->
-        <div class="gift-scene" onclick="celebrate()">
-            <div class="cube" id="giftCube">
-                <div class="cube__face cube__face--front"></div>
-                <div class="cube__face cube__face--right"></div>
-                <div class="cube__face cube__face--back"></div>
-                <div class="cube__face cube__face--left"></div>
-                <div class="cube__face cube__face--top"></div>
-                <div class="cube__face cube__face--bottom"></div>
+    <!-- Floating Interactive Music Widget -->
+    <button class="music-widget" id="musicBtn" onclick="toggleMusic()">
+        <span>🎵</span> <span id="musicStatus">Play Music</span>
+    </button>
+
+    <!-- Navigation Sidebar Containing Memories Button -->
+    <div class="sidebar">
+        <button class="sidebar-btn" onclick="openMemories()">
+            📷 <span>Memories</span>
+        </button>
+    </div>
+
+    <!-- Memory Gallery Pop-up Modal Section -->
+    <div class="memories-modal" id="memoriesModal" onclick="closeMemoriesExternal(event)">
+        <div class="modal-card">
+            <span class="close-modal" onclick="closeMemories()">&times;</span>
+            <h3 style="font-family:'Fredoka One'; color:#98f5ff; margin-bottom: 5px;">Memory Gallery 📷</h3>
+            <p style="font-size: 0.85rem; color: #ffe5ec;">Beautiful moments inside time</p>
+            <div class="gallery-grid">
+                <!-- Dynamically assigned polaroid styled grid layouts -->
+                <div class="photo-frame" style="--r: -5"><img src="1.jpeg" alt="Nawal 1"></div>
+                <div class="photo-frame" style="--r: 3"><img src="2.jpeg" alt="Nawal 2"></div>
+                <div class="photo-frame" style="--r: -3"><img src="3.jpeg" alt="Nawal 3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="aurora"></div>
+    <canvas id="fxCanvas"></canvas>
+
+    <div class="app-wrapper" id="appContent">
+        <!-- Main Stage Container -->
+        <div class="section-card">
+            <h1>Happy Birthday<br>Nawal Numan</h1>
+            <div class="badge">Turning 22 ✨</div>
+
+            <!-- Double Feature Interaction Area -->
+            <div class="interactive-zone">
+                <div class="cake-container" onclick="extinguishManual()">
+                    <div class="candle"><div class="flame" id="cakeFlame"></div></div>
+                    <div class="cake"></div>
+                </div>
+
+                <div class="gift-scene" onclick="openGift()">
+                    <div class="cube" id="giftCube">
+                        <div class="cube__face cube__face--front"></div>
+                        <div class="cube__face cube__face--right"></div>
+                        <div class="cube__face cube__face--back"></div>
+                        <div class="cube__face cube__face--left"></div>
+                        <div class="cube__face cube__face--top"></div>
+                        <div class="cube__face cube__face--bottom"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="blow-prompt" id="micPrompt">🎵 Click elements or Allow Mic & Blow to clear the flame!</div>
+        </div>
+
+        <!-- Interactive Love Letter Component -->
+        <div class="section-card">
+            <button class="letter-btn" onclick="toggleLetter()">Open My Letter 💌</button>
+            <div class="letter-content" id="letterBox">
+                Dearest Nawal,<br><br>
+                Happy 22nd Birthday to my incredible cousin! Having you in my life brings so much warmth and happiness. 
+                Watching you grow into such an amazing individual is a joy. May this chapter bring you closer to all your dreams, 
+                and may your year be infinitely magical, radiant, and wonderful.<br><br>
+                With love always,<br>
+                Your Cousin ❤️
             </div>
         </div>
 
-        <p class="message">
-            Wishing you a year filled with sweet surprises, beautiful adventures, and endless laughter. Hover or spin the gift box, and click below to celebrate! 🎂💖
-        </p>
+        <button class="letter-btn" style="background:linear-gradient(45deg, #b583ff, #ff758f)" onclick="startCinematic()">Click For Ending Credits 🌙</button>
+    </div>
 
-        <button class="btn" onclick="celebrate()">Click to Celebrate 🎉</button>
+    <!-- The Grand Cinematic Ending Screen Viewport -->
+    <div class="cinematic-overlay" id="outroScreen">
+        <div class="cinematic-title">To Nawal, With Love</div>
+        <div class="cinematic-text">
+            As the stars dance across the sky and the glowing lights fade out, remember how much you are celebrated today and every day. 
+            Cheers to 22 years of beautiful presence. Happy Birthday, Cousin! 🌌✨
+        </div>
     </div>
 
     <script>
-        // --- THREE.JS 3D BACKGROUND SETTING ---
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        
-        // Camera setup
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 30;
+        // --- MULTI-THREAD ENGINE FOR BACKGROUND FX (Stars, Aurora, Sakura, Dust, Butterflies, Fireworks) ---
+        const canvas = document.getElementById('fxCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
 
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        container.appendChild(renderer.domElement);
-
-        // Add soft ambient lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        scene.add(ambientLight);
-
-        // Add directional light to create 3D shadows/depth
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-        dirLight.position.set(10, 20, 15);
-        scene.add(dirLight);
-
-        // Generate a bunch of cute 3D pastel floating bubbles/balloons
-        const balloonCount = 30;
-        const balloons = [];
-        const colors = [0xffb6c1, 0xffc2d1, 0xb583ff, 0x98f5ff, 0xffdeb3, 0xfff0f5];
-
-        for (let i = 0; i < balloonCount; i++) {
-            // Cute balloon/egg-like smooth 3D shape
-            const geometry = new THREE.SphereGeometry(Math.random() * 1.5 + 0.8, 32, 32);
-            // Matte pastel finish material
-            const material = new THREE.MeshToonMaterial({
-                color: colors[Math.floor(Math.random() * colors.length)],
-                roughness: 0.2
-            });
-            
-            const mesh = new THREE.Mesh(geometry, material);
-            
-            // Randomly scatter them across the view space
-            mesh.position.x = (Math.random() - 0.5) * 45;
-            mesh.position.y = (Math.random() - 0.5) * 45;
-            mesh.position.z = (Math.random() - 0.5) * 20;
-            
-            // Random speed parameters for organic floating animation
-            mesh.userData = {
-                speedY: Math.random() * 0.03 + 0.01,
-                rotSpeed: Math.random() * 0.01,
-                driftX: Math.sin(Math.random() * 10) * 0.01
-            };
-            
-            scene.add(mesh);
-            balloons.push(mesh);
-        }
-
-        // Animation Loop for Three.js
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            balloons.forEach(b => {
-                b.position.y += b.userData.speedY;
-                b.position.x += b.userData.driftX;
-                b.rotation.x += b.userData.rotSpeed;
-                b.rotation.y += b.userData.rotSpeed;
-                
-                // If balloon floats past top screen, recycle to the bottom
-                if (b.position.y > 25) {
-                    b.position.y = -25;
-                    b.position.x = (Math.random() - 0.5) * 45;
-                }
-            });
-
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Handle browser window resizing dynamically
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            generateStars();
         });
 
-        // --- CELEBRATION & CONFETTI INTERACTION ---
-        function celebrate() {
-            // 3D box spin kick effect
-            const cube = document.getElementById('giftCube');
-            cube.style.transform = "rotateX(360deg) rotateY(720deg)";
-            setTimeout(() => {
-                cube.style.transform = "rotateX(-20deg) rotateY(45deg)";
-            }, 800);
+        const stars = [];
+        const petals = [];
+        const butterflies = [];
+        const fairyDust = [];
+        const fireworks = [];
 
-            // Pop confetti burst from both lower sides of the screen
-            confetti({
-                particleCount: 150,
-                spread: 80,
-                origin: { y: 0.8, x: 0.2 },
-                colors: ['#ff5c8a', '#ff99b6', '#b583ff', '#ffde43']
+        function generateStars() {
+            stars.length = 0;
+            for(let i=0; i<120; i++) {
+                stars.push({ x: Math.random()*width, y: Math.random()*height, r: Math.random()*1.5, alpha: Math.random(), speed: Math.random()*0.02 });
+            }
+        }
+        generateStars();
+
+        for(let i=0; i<30; i++) {
+            petals.push({
+                x: Math.random()*width, y: Math.random()*height - height,
+                r: Math.random()*6 + 4, d: Math.random()*20 + 10,
+                speedY: Math.random()*1.5 + 1, speedX: Math.random()*1 - 0.5, flip: Math.random()
             });
-            confetti({
-                particleCount: 150,
-                spread: 80,
-                origin: { y: 0.8, x: 0.8 },
-                colors: ['#ff5c8a', '#ff99b6', '#b583ff', '#ffde43']
+        }
+
+        for(let i=0; i<4; i++) {
+            butterflies.push({
+                x: Math.random()*width, y: Math.random()*height,
+                size: Math.random()*8 + 8, angle: Math.random()*Math.PI*2,
+                speed: Math.random()*1 + 1, phase: Math.random()*100
             });
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            for(let i=0; i<3; i++) {
+                fairyDust.push({
+                    x: e.clientX, y: e.clientY,
+                    vx: (Math.random()-0.5)*3, vy: (Math.random()-0.5)*3,
+                    alpha: 1, size: Math.random()*3 + 1, color: `hsl(${Math.random()*40 + 330}, 100%, 75%)`
+                });
+            }
+        });
+
+        function loop() {
+            ctx.clearRect(0, 0, width, height);
+
+            stars.forEach(s => {
+                s.alpha += s.speed;
+                if(s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
+                ctx.globalAlpha = Math.max(0, s.alpha);
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+            });
+            ctx.globalAlpha = 1.0;
+
+            ctx.fillStyle = 'rgba(255, 182, 193, 0.75)';
+            petals.forEach(p => {
+                p.y += p.speedY; p.x += p.speedX; p.flip += 0.05;
+                if(p.y > height) { p.y = -20; p.x = Math.random()*width; }
+                ctx.beginPath();
+                ctx.ellipse(p.x, p.y, p.r, p.r * Math.abs(Math.sin(p.flip)), Math.PI/4, 0, Math.PI*2);
+                ctx.fill();
+            });
+
+            butterflies.forEach(b => {
+                b.phase += 0.08;
+                b.x += Math.cos(b.angle) * b.speed;
+                b.y += Math.sin(b.angle) * b.speed;
+                if(Math.random() < 0.02) b.angle += (Math.random() - 0.5) * 2;
+                if(b.x<0 || b.x>width || b.y<0 || b.y>height) { b.x = Math.random()*width; b.y = Math.random()*height; }
+                
+                ctx.shadowBlur = 15; ctx.shadowColor = '#98f5ff';
+                ctx.fillStyle = 'rgba(152, 245, 255, 0.8)';
+                ctx.beginPath();
+                ctx.ellipse(b.x, b.y, b.size, b.size * Math.abs(Math.sin(b.phase)), 0, 0, Math.PI*2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            fairyDust.forEach((d, index) => {
+                d.x += d.vx; d.y += d.vy; d.alpha -= 0.015;
+                if(d.alpha <= 0) { fairyDust.splice(index, 1); return; }
+                ctx.globalAlpha = d.alpha;
+                ctx.shadowBlur = 10; ctx.shadowColor = d.color;
+                ctx.fillStyle = d.color;
+                ctx.beginPath(); ctx.arc(d.x, d.y, d.size, 0, Math.PI*2); ctx.fill();
+            });
+            ctx.globalAlpha = 1.0; ctx.shadowBlur = 0;
+
+            fireworks.forEach((f, idx) => {
+                if(!f.exploded) {
+                    f.y += f.vy;
+                    if(f.y <= f.targetY) {
+                        f.exploded = true;
+                        createExplosion(f.x, f.y);
+                    } else {
+                        ctx.fillStyle = '#ffde43';
+                        ctx.fillRect(f.x, f.y, 3, 3);
+                    }
+                } else {
+                    f.particles.forEach((p, pIdx) => {
+                        p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.alpha -= 0.012;
+                        if(p.alpha <= 0) f.particles.splice(pIdx, 1);
+                        ctx.globalAlpha = p.alpha;
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x, p.y, p.size, p.size);
+                    });
+                    if(f.particles.length === 0) fireworks.splice(idx, 1);
+                }
+            });
+            ctx.globalAlpha = 1.0;
+
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+
+        function triggerFirework() {
+            const startX = Math.random()*width;
+            const targetY = Math.random()*(height*0.4) + 50;
+            fireworks.push({ x: startX, y: height, targetY: targetY, vy: -7, exploded: false, particles: [] });
+        }
+
+        function createExplosion(x, y) {
+            const colors = ['#ff5c8a', '#b583ff', '#98f5ff', '#ffde43', '#ff99b6'];
+            const chosenColor = colors[Math.floor(Math.random()*colors.length)];
+            const firework = fireworks.find(f => f.x === x && f.y === y);
+            if(!firework) return;
+            for(let i=0; i<60; i++) {
+                const angle = Math.random()*Math.PI*2;
+                const speed = Math.random()*4 + 1;
+                firework.particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+                    alpha: 1, size: Math.random()*3 + 1, color: chosenColor
+                });
+            }
+        }
+
+        // --- MUSIC WIDGET CONTROLLER ---
+        const audio = document.getElementById('bgMusic');
+        const musicStatus = document.getElementById('musicStatus');
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    musicStatus.innerText = "Pause Music";
+                }).catch(err => console.log("Playback blocked:", err));
+            } else {
+                audio.pause();
+                musicStatus.innerText = "Play Music";
+            }
+        }
+
+        // --- POP-UP MODAL ENGINE ---
+        function openMemories() {
+            document.getElementById('memoriesModal').classList.add('open');
+        }
+
+        function closeMemories() {
+            document.getElementById('memoriesModal').classList.remove('open');
+        }
+
+        function closeMemoriesExternal(event) {
+            // Closes modal if user clicks the dark background outside the card
+            if(event.target.id === "memoriesModal") {
+                closeMemories();
+            }
+        }
+
+        // --- NATIVE 3D PRESENT & AUDIO TRIGGER SYSTEM ---
+        function openGift() {
+            if(audio.paused) {
+                audio.play().then(() => {
+                    musicStatus.innerText = "Pause Music";
+                }).catch(() => {});
+            }
+
+            const cube = document.getElementById('giftCube');
+            if(!cube.classList.contains('open')) {
+                cube.classList.add('open');
+                confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } });
+                for(let i=0; i<4; i++) setTimeout(triggerFirework, i*300);
+            }
+        }
+
+        // --- MICROPHONE ANALYZER INTERACTION ---
+        function extinguishManual() {
+            const flame = document.getElementById('cakeFlame');
+            if(!flame.classList.contains('extinguished')) {
+                flame.classList.add('extinguished');
+                confetti({ particleCount: 50, angle: 90, spread: 40, origin: { y: 0.6 } });
+            }
+        }
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioCtx.createMediaStreamSource(stream);
+            const analyzer = audioCtx.createAnalyser();
+            analyzer.fftSize = 256;
+            source.connect(analyzer);
+
+            const bufferLength = analyzer.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            document.getElementById('micPrompt').innerText = "🎈 Blow into your mic to blow out the candle! 🕯️";
+
+            function checkBlow() {
+                analyzer.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for(let i=0; i<bufferLength; i++) sum += dataArray[i];
+                let average = sum / bufferLength;
+
+                if(average > 55) { 
+                    extinguishManual();
+                }
+                requestAnimationFrame(checkBlow);
+            }
+            checkBlow();
+        }).catch(() => {});
+
+        // --- LETTER & CINEMATIC WRAP SYSTEM ---
+        function toggleLetter() {
+            document.getElementById('letterBox').classList.toggle('open');
+        }
+
+        function startCinematic() {
+            document.getElementById('outroScreen').classList.add('active');
+            setInterval(triggerFirework, 600);
         }
     </script>
 </body>
